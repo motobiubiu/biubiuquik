@@ -13,11 +13,11 @@ import numpy as np
 
 def gen_golden_data_simple():
     input_x = np.random.uniform(1, 100, [8, 2048]).astype(np.float16)
-    # input_y = np.random.uniform(1, 100, [8, 2048]).astype(np.float16)
-    golden = np.maximum(0,np.minimum(1,(input_x+1)/2)).astype(np.float16)
+    input_y = np.random.uniform(1, 100, [8, 2048]).astype(np.float16)
+    golden = (input_x*np.log(input_x/input_y)).astype(np.float16)
 
     input_x.tofile("./input/input_x.bin")
-    # input_y.tofile("./input/input_y.bin")
+    input_y.tofile("./input/input_y.bin")
     golden.tofile("./output/golden.bin")
 
 

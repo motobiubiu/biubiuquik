@@ -16,9 +16,9 @@ constexpr int32_t TILE_NUM = 8;                                       // split d
 constexpr int32_t BUFFER_NUM = 2;                                     // tensor num for each queue
 constexpr int32_t TILE_LENGTH = BLOCK_LENGTH / TILE_NUM / BUFFER_NUM; // separate to 2 parts, due to double buffer
 
-class KernelHadsigmoid {
+class KernelSigmoid {
 public:
-    __aicore__ inline KernelHadsigmoid() {}
+    __aicore__ inline KernelSigmoid() {}
     __aicore__ inline void Init(GM_ADDR x, GM_ADDR z)
     {
         xGm.SetGlobalBuffer((__gm__ half *)x + BLOCK_LENGTH * AscendC::GetBlockIdx(), BLOCK_LENGTH);
@@ -29,8 +29,6 @@ public:
         pipe.InitBuffer(outQueueZ, BUFFER_NUM, TILE_LENGTH * sizeof(half));
         pipe.InitBuffer(calcBuf1, TILE_LENGTH * sizeof(half));
         pipe.InitBuffer(calcBuf2, TILE_LENGTH * sizeof(half));
-        pipe.InitBuffer(calcBuf3, TILE_LENGTH * sizeof(half));
-        pipe.InitBuffer(calcBuf4, TILE_LENGTH * sizeof(half));
     }
     __aicore__ inline void Process()
     {
@@ -57,19 +55,15 @@ private:
         AscendC::LocalTensor<half> xLocal = inQueueX.DeQue<half>();
         // AscendC::LocalTensor<half> yLocal = inQueueY.DeQue<half>();
         AscendC::LocalTensor<half> zLocal = outQueueZ.AllocTensor<half>();
-        // AscendC::Add(zLocal, xLocal, yLocal, TILE_LENGTH);
-        AscendC::LocalTensor<half> zero=calcBuf1.Get<half>();
-        AscendC::LocalTensor<half> one=calcBuf2.Get<half>();
-        AscendC::LocalTensor<half> tmp1=calcBuf3.Get<half>();
-        AscendC::LocalTensor<half> two=calcBuf4.Get<half>();
+        AscendC::LocalTensor<half> num_one = calcBuf1.Get<half>();
+        AscendC::LocalTensor<half> num_exp = calcBuf2.Get<half>();
+        AscendC::Duplicate<half>(num_one, 1.0, TILE_LENGTH);
 
-        AscendC::Duplicate<half>(zero, 0.f, TILE_LENGTH);
-        AscendC::Duplicate<half>(one, 1.f, TILE_LENGTH);
-        AscendC::Duplicate<half>(two, 2.f, TILE_LENGTH);
-        AscendC::Add(tmp1,xLocal,one,TILE_LENGTH);
-        AscendC::Div(tmp1,tmp1,two,TILE_LENGTH);
-        AscendC::Min(tmp1,tmp1,one,TILE_LENGTH);
-        AscendC::Max(zLocal,tmp1,zero,TILE_LENGTH);
+        AscendC::Exp(num_exp, xLocal, TILE_LENGTH);
+        AscendC::Div(num_exp, num_one, num_exp, TILE_LENGTH);
+        AscendC::Add(num_exp, num_one, num_exp, TILE_LENGTH);
+        AscendC::Div(zLocal, num_one, num_exp, TILE_LENGTH);
+        
         outQueueZ.EnQue<half>(zLocal);
         inQueueX.FreeTensor(xLocal);
         // inQueueY.FreeTensor(yLocal);
@@ -87,16 +81,14 @@ private:
     AscendC::TQue<AscendC::QuePosition::VECOUT, BUFFER_NUM> outQueueZ;
     AscendC::TBuf<AscendC::TPosition::VECCALC> calcBuf1; 
     AscendC::TBuf<AscendC::TPosition::VECCALC> calcBuf2; 
-    AscendC::TBuf<AscendC::TPosition::VECCALC> calcBuf3; 
-    AscendC::TBuf<AscendC::TPosition::VECCALC> calcBuf4; 
     AscendC::GlobalTensor<half> xGm;
     AscendC::GlobalTensor<half> yGm;
     AscendC::GlobalTensor<half> zGm;
 };
 
-extern "C" __global__ __aicore__ void hardsigmoid_custom(GM_ADDR x, GM_ADDR z)
+extern "C" __global__ __aicore__ void sigmoid_custom(GM_ADDR x, GM_ADDR z)
 {
-    KernelHadsigmoid op;
+    KernelSigmoid op;
     op.Init(x, z);
     op.Process();
 }

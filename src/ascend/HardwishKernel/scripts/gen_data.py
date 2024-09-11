@@ -12,9 +12,20 @@ import numpy as np
 
 
 def gen_golden_data_simple():
-    input_x = np.random.uniform(1, 100, [8, 2048]).astype(np.float16)
+    input_x = np.random.uniform(-50, 50, [8, 2048]).astype(np.float16)
     # input_y = np.random.uniform(1, 100, [8, 2048]).astype(np.float16)
-    golden = np.maximum(0,np.minimum(1,(input_x+1)/2)).astype(np.float16)
+    # golden = (input_x + input_y).astype(np.float16)
+    golden = np.zeros_like(input_x, dtype=np.float16)
+    for i in range(8):
+        for j in range(2048):
+            if input_x[i][j]<=-3.0:
+                golden[i][j]=0.0
+            elif input_x[i][j]>=3.0:
+                golden[i][j]=input_x[i][j]
+            else:
+                golden[i][j]=input_x[i][j]*(input_x[i][j]+3.0)/6.0
+    
+    golden=golden.astype(np.float16)
 
     input_x.tofile("./input/input_x.bin")
     # input_y.tofile("./input/input_y.bin")
