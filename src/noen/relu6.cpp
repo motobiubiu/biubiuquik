@@ -4,7 +4,7 @@
 #include <arm_neon.h>
 #include "help.h"
 
-// ReLU¼¤»îº¯Êý
+// ReLUï¿½ï¿½ï¿½îº¯ï¿½ï¿½
 void relu6(const std::vector<float>& input, std::vector<float>& output) {
     
     for (size_t i = 0; i < input.size(); ++i) {
@@ -41,7 +41,7 @@ int main(){
     auto time1=measureExecutionTime(relu6,input, output1);
     auto time2=measureExecutionTime(relu6NEON,input.data(), output2.data(),n);
 
-    // ´òÓ¡Ö´ÐÐÊ±¼ä
+
     std::cout << "Elapsed time: " << time1 << " seconds" << std::endl;     
     std::cout << "Elapsed time: " << time2 << " seconds" << std::endl;       
 

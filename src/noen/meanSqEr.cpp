@@ -43,8 +43,7 @@ int main() {
     }
     auto time1=measureExecutionTime(meanSquaredError,y_true.data(), y_pred.data(), output1,n);
     auto time2=measureExecutionTime(meanSquaredErrorAVX,y_true.data(), y_pred.data(), output2,n);
-    // meanSquaredError(y_true.data(), y_pred.data(), output1,n);
-    // meanSquaredErrorAVX(y_true.data(), y_pred.data(), output2,n);
+
     std::cout << "Mean Squared Error: " << output1 <<" time:" <<time1<< std::endl;
     std::cout << "Mean Squared Error: " << output2 <<" time:" <<time2<< std::endl;
     return 0;

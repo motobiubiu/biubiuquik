@@ -49,7 +49,6 @@ int main(){
     auto time1=measureExecutionTime(tanh1,input.data(), output1.data(),n);
     auto time2=measureExecutionTime(tanhNEON,input.data(), output2.data(),n);
 
-    // 打印执行时间
     std::cout << "Elapsed time: " << time1 << " seconds" << std::endl;     
     std::cout << "Elapsed time: " << time2 << " seconds" << std::endl;     
 

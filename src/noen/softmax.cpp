@@ -11,7 +11,7 @@ void softmax(const float* input,float* output,int n,float max_val) {
     
     float sum = 0.0;
     for (size_t i = 0; i < n; ++i) {
-        output[i] = std::exp(input[i] - max_val); // ¼õÈ¥×î´óÖµ·ÀÖ¹Òç³ö
+        output[i] = std::exp(input[i] - max_val); 
         sum += output[i];
     }
     for (size_t i = 0; i < n; ++i) {
@@ -57,12 +57,11 @@ int main(){
 
     std::vector<float> output1(n,0);   
     std::vector<float> output2(n,0);
-    float max_val = *std::max_element(input.begin(), input.end()); // ·ÀÖ¹Òç³ö   
+    float max_val = *std::max_element(input.begin(), input.end()); // ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½   
 
     auto time1=measureExecutionTime(softmax,input.data(), output1.data(),n,max_val);
     auto time2=measureExecutionTime(softmaxNEON,input.data(), output2.data(),n,max_val);
 
-    // ´òÓ¡Ö´ÐÐÊ±¼ä
     std::cout << "Elapsed time: " << time1 << " seconds" << std::endl;     
     std::cout << "Elapsed time: " << time2 << " seconds" << std::endl;     
 

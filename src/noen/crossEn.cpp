@@ -20,8 +20,7 @@ void crossEntropy(const float* y_true, const float* y_pred,float& output,const i
 
 void crossEntropyNEON(const float* y_true, const float* y_pred,float& output,const int n) {
 
-    // float sum = 0.0;
-    // float tmp2[n];
+
     float tmp[4];
     int num=n;
     float32x4_t vec_sum=vdupq_n_f32(0.0f);
@@ -34,12 +33,9 @@ void crossEntropyNEON(const float* y_true, const float* y_pred,float& output,con
         float32x4_t vec_res=vaddq_f32(vec_x, vec_y);
 
         vec_sum=vaddq_f32(vec_sum, vec_res);
-        // _mm256_storeu_ps(&tmp2[i], vec_res);
-        // sum += y_true[i] * std::log(y_pred[i]) + (1 - y_true[i]) * std::log(1 - y_pred[i]);
+        
     }
-    // for(int i=0;i<n;++i){
-        // sum+=tmp2[i];
-    // }
+
     vst1q_f32(tmp, vec_sum);
     output= -(tmp[0]+tmp[1]+tmp[2]+tmp[3]) / (float)num;
     // float out=-sum/n;
@@ -62,9 +58,5 @@ int main() {
     std::cout << "Cross-Entropy: " << output1 <<" time:" <<time1<< std::endl;
     std::cout << "Cross-Entropy: " << output2 <<" time:" <<time2<< std::endl;
     
-    // crossEntropy(y_true.data(), y_pred.data(),output1,n);
-    // crossEntropyAVX(y_true.data(), y_pred.data(),output2,n);
-    // std::cout << "Cross-Entropy: " << output1 << std::endl;
-    // std::cout << "Cross-Entropy: " << output2 << std::endl;
     return 0;
 }

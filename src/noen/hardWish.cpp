@@ -4,7 +4,7 @@
 #include "help.h"
 #include "funNeon.h"
 
-// hardWish¼¤»îº¯Êý
+// hardWishï¿½ï¿½ï¿½îº¯ï¿½ï¿½
 void hardWish(const std::vector<float>& input, std::vector<float>& output) {
     
     for (size_t i = 0; i < input.size(); ++i) {
@@ -37,8 +37,6 @@ void hardWishNEON(const float* input, float* output,int n) {
                            )                
                  );
 
-        // res=_mm256_max_ps(res, vec);
-
         vst1q_f32(&output[i], res);
     }
     
@@ -60,7 +58,7 @@ int main(){
     auto time1=measureExecutionTime(hardWish,input, output1);
     auto time2=measureExecutionTime(hardWishNEON,input.data(), output2.data(),n);
 
-    // ´òÓ¡Ö´ÐÐÊ±¼ä
+
     std::cout << "Elapsed time: " << time1 << " seconds" << std::endl;     
     std::cout << "Elapsed time: " << time2 << " seconds" << std::endl;
 

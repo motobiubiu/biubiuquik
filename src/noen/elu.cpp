@@ -6,7 +6,7 @@
 #include "funNeon.h"
 
 
-// elu激活函数
+
 void elu(const std::vector<float>& input, std::vector<float>& output,float alpha) {
     
     for (size_t i = 0; i < input.size(); ++i) {
@@ -50,7 +50,7 @@ int main(){
     auto time1=measureExecutionTime(elu,input,output1,alpha);
     auto time2=measureExecutionTime(eluNEON,input.data(),output2.data(),n,alpha);
 
-    // 打印执行时间
+
     std::cout << "Elapsed time: " << time1 << " seconds" << std::endl;     
     std::cout << "Elapsed time: " << time2 << " seconds" << std::endl;     
 

@@ -6,7 +6,7 @@
 #include <chrono>
 #include "help.h"
 
-// ReLU激活函数
+// ReLU锟斤拷锟筋函锟斤拷
 void relu(const std::vector<float>& input, std::vector<float>& output) {
     
     for (size_t i = 0; i < input.size(); ++i) {
@@ -42,8 +42,6 @@ int main(){
     auto time1=measureExecutionTime(relu,input, output1);
     auto time2=measureExecutionTime(reluNEON,input.data(), output2.data(),n);
 
-    // 打印执行时间
-    // 打印执行时间
     std::cout << "Elapsed time: " << time1 << " seconds" << std::endl;     
     std::cout << "Elapsed time: " << time2 << " seconds" << std::endl;       
 

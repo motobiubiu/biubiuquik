@@ -1,33 +1,33 @@
-#include <arm_neon.h>  // °üº¬AVX2Ö¸ÁîµÄÍ·ÎÄ¼ş
+#include <arm_neon.h>  // ï¿½ï¿½ï¿½ï¿½AVX2Ö¸ï¿½ï¿½ï¿½Í·ï¿½Ä¼ï¿½
 #include <stdio.h>
 #include <vector>
 #include <chrono>
 #include <iostream>
 #include "help.h"
 
-// ¼ÙÉèÊäÈëÕÅÁ¿ X µÄĞÎ×´Îª (n, d_in)£¬È¨ÖØ¾ØÕó W µÄĞÎ×´Îª (d_in, d_out)£¬Æ«ÖÃÏòÁ¿ b µÄĞÎ×´Îª (d_out)
+
 void linearNEON(const float* X, const float* W, const float* b, float* output, int n, int d_in, int d_out) {
-    // ¼ÆËãÊä³öÕÅÁ¿ output µÄĞÎ×´Îª (n, d_out)
+    
     for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < d_out; j += 4) {  // Ã¿´Î´¦Àí8¸öÊä³öÔªËØ
+        for (int j = 0; j < d_out; j += 4) {  
         
-            float32x4_t  sum = vmovq_n_f32(0.0f);  // ³õÊ¼»¯ÀÛ¼ÓÆ÷Îª0
+            float32x4_t  sum = vmovq_n_f32(0.0f); 
 
             for (int k = 0; k < d_in; ++k) {
-                // ¼ÓÔØÈ¨ÖØ¾ØÕóµÄÒ»ĞĞ
+                
                 float32x4_t w = vld1q_f32(&W[k * d_out + j]);
-                // ¼ÓÔØÊäÈëÕÅÁ¿µÄÒ»ĞĞµÄÒ»¸öÔªËØ
+                
                 float32x4_t x = vmovq_n_f32(X[i * d_in + k]);
-                // ¼ÆËã³Ë»ı²¢ÀÛ¼Ó
+                
                 sum = vaddq_f32(sum, vmulq_f32(w, x));
             }
 
-            // ¼ÓÔØÆ«ÖÃÏòÁ¿
+            
             float32x4_t bias = vld1q_f32(&b[j]);
-            // ¼ÓÉÏÆ«ÖÃ
+            
             sum = vaddq_f32(sum, bias);
 
-            // ½«½á¹û´æ´¢µ½Êä³öÕÅÁ¿
+            
             vst1q_f32(&output[i * d_out + j], sum);
         }
     }
@@ -48,7 +48,7 @@ void linear(const float* X, const float* W, const float* b, float* output, int n
 
 
 int main() {
-    // Ê¾ÀıÊı¾İ
+    
     std::vector<float> X;
     std::vector<float> W;
     std::vector<float> b;
@@ -63,20 +63,18 @@ int main() {
         
     }
 
-    // float X[] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
-    // float W[] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0};
-    // float b[] = {1.0, 2.0, 3.0, 4.0};
+
     std::vector<float> output(n*n,0);
     std::vector<float> output1(n*n,0);
 
     auto time1=measureExecutionTime(linear,X.data(), W.data(), b.data(), output.data(), n, n, n);
     auto time2=measureExecutionTime(linearNEON,X.data(), W.data(), b.data(), output1.data(), n, n, n);
 
-    // ´òÓ¡Ö´ĞĞÊ±¼ä
+
     std::cout << "Elapsed time: " << time1 << " seconds" << std::endl;
     std::cout << "Elapsed time: " << time2 << " seconds" << std::endl;
 
-    //´òÓ¡Êä³ö½á¹û
+
     check(output.data(), output1.data(), n);
 
 

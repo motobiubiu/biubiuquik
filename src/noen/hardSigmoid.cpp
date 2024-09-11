@@ -5,7 +5,7 @@
 #include "help.h"
 #include "funNeon.h"
 
-// ReLU激活函数
+
 void hardSigmoid(const std::vector<float>& input, std::vector<float>& output) {
     
     for (size_t i = 0; i < input.size(); ++i) {
@@ -45,7 +45,7 @@ int main(){
     auto time1=measureExecutionTime(hardSigmoid,input, output1);
     auto time2=measureExecutionTime(hardSigmoidNEON,input.data(), output2.data(),n);
 
-    // 打印执行时间
+
     std::cout << "Elapsed time: " << time1 << " seconds" << std::endl;     
     std::cout << "Elapsed time: " << time2 << " seconds" << std::endl;  
     check(output1.data(), output2.data(), n);

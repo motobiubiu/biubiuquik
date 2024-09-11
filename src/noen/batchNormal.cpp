@@ -8,8 +8,7 @@
 
 // 批归一化 (Batch Normalization)
 void batchNormalization(float* input,float* output,float*gemma,float* beta,int batchSize,int numFeatures, float eps = 1e-5) {
-    // int batchSize = x.size();
-    // int numFeatures = x[0].size();
+
 
     std::vector<float> mean(batchSize, 0.0);
     std::vector<float> variance(batchSize, 0.0);
@@ -83,7 +82,6 @@ void batchNormalizationNEON(float* input,float* output,float*gemma,float* beta,i
             float32x4_t stddev_vec=vmovq_n_f32(stddev[i]);
             float32x4_t res=div_ps(vsubq_f32(vec, mean_vec), stddev_vec);
             vst1q_f32(&output[i*numFeatures+j], res);
-            // output[i*numFeatures+j]=(input[i*numFeatures+j]-mean[i])/stddev[i];
         }
     }
 
@@ -94,7 +92,6 @@ void batchNormalizationNEON(float* input,float* output,float*gemma,float* beta,i
             float32x4_t beta_vec=vld1q_f32(&beta[j]);
             float32x4_t res=vaddq_f32(vmulq_f32(vec, gemma_vec), beta_vec);
             vst1q_f32(&output[i*numFeatures+j], res);
-            // output[i*numFeatures+j]=output[i*numFeatures+j]*gemma[j]+beta[j];
         }
     }
 }
@@ -104,20 +101,7 @@ void batchNormalizationNEON(float* input,float* output,float*gemma,float* beta,i
 int main() {
     int batchSize = 1024;
     int numFeatures = 1024;
-    // std::vector<float> data = {
-    //     1, 2, 3, 4, 5, 6, 7, 8,
-    //     9, 10, 11, 12, 13, 14, 15, 16,
-    //     17, 18, 19, 20, 21, 22, 23, 24,
-    //     25, 26, 27, 28, 29, 30, 31, 32
-    // };
 
-    // std::cout << "Original Data:\n";
-    // for (int i = 0; i < batchSize; ++i) {
-    //     for (int j = 0; j < numFeatures; ++j) {
-    //         std::cout << data[i * numFeatures + j] << " ";
-    //     }
-    //     std::cout << "\n";
-    // }
     std::vector<float>data(batchSize*numFeatures,0);
     for(int i=0;i<batchSize;++i){
         for(int j=0;j<numFeatures;++j){

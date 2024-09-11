@@ -1,7 +1,7 @@
 #include "help.h"
-#include <arm_neon.h>   // ����AVXָ���ͷ�ļ�
+#include <arm_neon.h>   
 #include <stdio.h>
-#include <float.h> // ����FLT_MAX
+#include <float.h> 
 #include <vector>
 #include <iostream>
 

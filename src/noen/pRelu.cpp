@@ -6,7 +6,7 @@
 #include <chrono>
 #include "help.h"
 
-// pRelu¼¤»îº¯Êý
+// pReluï¿½ï¿½ï¿½îº¯ï¿½ï¿½
 void pRelu(const std::vector<float>& input, std::vector<float>& output,float alpha) {
     
     for (size_t i = 0; i < input.size(); ++i) {
@@ -47,7 +47,7 @@ int main(){
     auto time1=measureExecutionTime(pRelu,input,output1,alpha);
     auto time2=measureExecutionTime(pReluNEON,input.data(),output2.data(),n,alpha);
 
-    // ´òÓ¡Ö´ÐÐÊ±¼ä
+ 
     std::cout << "Elapsed time: " << time1 << " seconds" << std::endl;     
     std::cout << "Elapsed time: " << time2 << " seconds" << std::endl;     
 

@@ -20,8 +20,6 @@ void siluNEON(const float* input,float* output,int n){
         float32x4_t vec=vld1q_f32(&input[i]);
         float32x4_t res=vmovq_n_f32(1.0f);
         float32x4_t one=vmovq_n_f32(1.0f);
-        // float32x4_t neg_mask = vmovq_n_f32(-0.0f);
-        // float32x4_t neg_vec = _mm256_xor_ps(vec, neg_mask);
 
         float32x4_t exp_vec=div_ps(one,exp_ps(vec));
         res=div_ps(one, vaddq_f32(one, exp_vec));
@@ -48,7 +46,7 @@ int main(){
     auto time1=measureExecutionTime(silu,input.data(), output1.data(),n);
     auto time2=measureExecutionTime(siluNEON,input.data(), output2.data(),n);
 
-    // ´òÓ¡Ö´ÐÐÊ±¼ä
+    // ï¿½ï¿½Ó¡Ö´ï¿½ï¿½Ê±ï¿½ï¿½
     std::cout << "Elapsed time: " << time1 << " seconds" << std::endl;     
     std::cout << "Elapsed time: " << time2 << " seconds" << std::endl;     
 
