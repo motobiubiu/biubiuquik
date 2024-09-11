@@ -27,7 +27,7 @@ gcc -mavx2 -g -o linearv linear.cpp  -lstdc++ -lm
 ```
 neon 32位
 ```shell
-cd neon
+cd src/neon
 arm-linux-gnueabihf-gcc   --static -mfpu=neon -mfloat-abi=hard -std=c++11  -o linear linear.cpp -lstdc++ -lm
 ```
 
@@ -38,5 +38,5 @@ cd src/ascend/CrossEnKernel
 ```
 
 ## 依赖库
-https://github.com/reyoung/avx_mathfun
+https://github.com/reyoung/avx_mathfun \
 http://gruntthepeon.free.fr/ssemath/neon_mathfun.html
