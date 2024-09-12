@@ -3,7 +3,8 @@
 ## 主要使用的实现方式
 avx2：256位，处理32位float，一次处理8个数据\
 noen：128位，处理32位float，一次处理4个数据\
-Ascend：昇腾npu
+Ascend：昇腾npu，主要计算half数据类型\
+CUDA
 ## 主要实现的算子
 Linear
 ReLU
@@ -36,6 +37,18 @@ AscendC
 cd src/ascend/CrossEnKernel
 ./bash run.sh -r npu -v Ascend910A
 ```
+
+CUDA
+```shell
+cd src/cuda
+nvcc -o silu silu.cu
+```
+
+## 主要问题
+avx：exp和log函数精度不足，计算不够快，以及向量进行累加以后精度也会不足\
+noen：exp和log函数精度不足，计算不够快\
+AscendC：exp和ln函数精度不够\
+CUDA：由于要从内存拷贝到显存，非计算密集的算子实现不如cpu实现块，可以用shared memory加快计算\
 
 ## 依赖库
 https://github.com/reyoung/avx_mathfun \
