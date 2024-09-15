@@ -3,7 +3,7 @@
 ## 主要使用的实现方式
 avx2：256位，处理32位float，一次处理8个数据\
 noen：128位，处理32位float，一次处理4个数据\
-Ascend：昇腾npu 910A，主要计算half数据类型，使用基础api实现\
+AscendC：昇腾npu 910A，主要计算half数据类型，使用基础api实现\
 CUDA：nvidia显卡\
 Triton：GPU算子编译器
 ## 主要实现的算子
