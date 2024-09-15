@@ -83,10 +83,10 @@ private:
     AscendC::TPipe pipe;
     AscendC::TQue<AscendC::QuePosition::VECIN, BUFFER_NUM> inQueueX, inQueueY;
     AscendC::TQue<AscendC::QuePosition::VECOUT, BUFFER_NUM> outQueueZ;
-    AscendC::TBuf<AscendC::TPosition::VECCALC> calcBuf1; // ģ�����ΪTPosition�е�VECCALC����
-    AscendC::TBuf<AscendC::TPosition::VECCALC> calcBuf2; // ģ�����ΪTPosition�е�VECCALC����
-    AscendC::TBuf<AscendC::TPosition::VECCALC> calcBuf3; // ģ�����ΪTPosition�е�VECCALC����
-    AscendC::TBuf<AscendC::TPosition::VECCALC> calcBuf4; // ģ�����ΪTPosition�е�VECCALC����
+    AscendC::TBuf<AscendC::TPosition::VECCALC> calcBuf1; 
+    AscendC::TBuf<AscendC::TPosition::VECCALC> calcBuf2; 
+    AscendC::TBuf<AscendC::TPosition::VECCALC> calcBuf3; 
+    AscendC::TBuf<AscendC::TPosition::VECCALC> calcBuf4; 
     AscendC::GlobalTensor<half> xGm;
     AscendC::GlobalTensor<half> yGm;
     AscendC::GlobalTensor<half> zGm;
